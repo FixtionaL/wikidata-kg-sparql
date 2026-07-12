@@ -39,16 +39,16 @@ All queries run on the public [Wikidata Query Service](https://query.wikidata.or
 
 ```
 /queries
-  task1_lonely_countries.rq
-  task2_academic_lineage.rq
-  task3_egot_gap.rq
-  task4_scientific_gender_gap.rq
-  task5_polyglot_cinema.rq
-  task6_political_education.rq
-  task7_27_club.rq
-  task8_chemical_composition.rq
-  task9_data_consistency.rq
-  task10_modern_metropolis.rq
+  task1.rq
+  task2.rq
+  task3.rq
+  task4.rq
+  task5.rq
+  task6.rq
+  task7.rq
+  task8.rq
+  task9.rq
+  task10.rq
 report.pdf
 README.md
 ```
