@@ -1,0 +1,24 @@
+# Task 3: The "EGOT" Gap
+# Objective: Count the number of humans who have won an Academy Award but have never won any Golden Globe Award.
+
+SELECT (COUNT(DISTINCT ?person) AS ?egotGapCount)
+WHERE {
+
+  # Restrict results to humans
+  # P31 = instance of
+  # Q5 = human
+  ?person wdt:P31 wd:Q5 .
+
+  # Identify people who have received an Academy Award
+  # P166 = award received
+  # Q19020 = Academy Awards
+  ?person wdt:P166 wd:Q19020 .
+
+  # Exclude anyone who has received any Golden Globe award.
+  # Instead of matching a single award entity, we match all subclasses of the Golden Globe Awards category.
+  FILTER NOT EXISTS {
+      ?person wdt:P166 ?ggAward .
+      ?ggAward wdt:P279* wd:Q1011547 .
+  }
+
+}

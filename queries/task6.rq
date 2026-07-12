@@ -1,0 +1,32 @@
+# Task 6: Political Education
+# Objective: Count the number of entities who held the position of head of government (or a subclass of it) and also hold a doctorate degree (or a subclass of it).
+
+SELECT (COUNT(DISTINCT ?person) AS ?politicalEducationCount)
+WHERE {
+
+  # First collect all positions that are equal to, or subclasses of, head of government. Using a subquery helps reduce the search space before matching people.
+  {
+    SELECT DISTINCT ?hogPosition
+    WHERE {
+      # P279 = subclass of
+      # Q2285706 = head of government
+      ?hogPosition wdt:P279* wd:Q2285706 .
+    }
+  }
+
+  # Then collect all academic degrees that are equal to, or subclasses of, doctorate. This follows the task hint to capture doctorate subclasses.
+  {
+    SELECT DISTINCT ?doctorateDegree
+    WHERE {
+      # P279 = subclass of
+      # Q849697 = doctorate
+      ?doctorateDegree wdt:P279* wd:Q849697 .
+    }
+  }
+
+  # Match people who held one of the qualifying head-of-government positions and also hold one of the qualifying doctorate-level degrees.
+  # P39 = position held
+  # P512 = academic degree
+  ?person wdt:P39 ?hogPosition .
+  ?person wdt:P512 ?doctorateDegree .
+}

@@ -1,0 +1,25 @@
+# Task 9: Data Consistency Audit
+# Objective: Count the number of humans that have a recorded date of death but are missing a recorded date of birth.
+
+SELECT (COUNT(*) AS ?missingBirthCount)
+WHERE {
+
+  # First identify humans with a death date, then use FILTER to keep only those where no birth date is present.
+  {
+    SELECT DISTINCT ?person
+    WHERE {
+      # P31 = instance of
+      # Q5 = human
+      ?person wdt:P31 wd:Q5 .
+
+      # P570 = date of death
+      ?person wdt:P570 ?deathDate .
+
+      # P569 = date of birth
+      OPTIONAL { ?person wdt:P569 ?birthDate . }
+
+      # Keep only people for whom no birth date is recorded
+      FILTER(!BOUND(?birthDate))
+    }
+  }
+}

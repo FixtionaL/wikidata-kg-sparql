@@ -1,0 +1,36 @@
+# Task 7: The “27 Club” & Others
+# Objective: Count the number of musical groups that have had more than two members who died before the year 2000.
+
+SELECT (COUNT(*) AS ?groupCount)
+WHERE {
+
+  # Subquery identifies musical groups that have more than two members with a recorded death date before 2000.
+  {
+    SELECT ?group
+    WHERE {
+
+      # Restrict entities to musical groups
+      # P31 = instance of
+      # Q215380 = musical group
+      ?group wdt:P31 wd:Q215380 .
+
+      # Use the member's relationship to the group, not the group itself.
+      # P463 = member of
+      ?member wdt:P463 ?group .
+
+      # Retrieve the death date of each member
+      # P570 = date of death
+      ?member wdt:P570 ?deathDate .
+
+      # Keep only members who died before 2000
+      FILTER(YEAR(?deathDate) < 2000)
+    }
+
+    # Group by musical group so that we can count qualifying members
+    GROUP BY ?group
+
+    # Keep only groups with more than two distinct deceased members
+    HAVING (COUNT(DISTINCT ?member) > 2)
+  }
+
+}

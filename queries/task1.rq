@@ -1,0 +1,31 @@
+# Task 1: The "Lonely" Countries
+# Objective: Count the number of sovereign states that share a land border with exactly one other country.
+
+# The outer query counts how many countries satisfy the "lonely country" condition.
+SELECT (COUNT(*) AS ?lonelyCountryCount)
+WHERE {
+
+  # Subquery used to first identify which countries have exactly one border neighbour.
+  {
+    SELECT ?country
+    WHERE {
+
+      # Restrict the entities to sovereign states.
+      # P31 = instance of
+      # Q3624078 = sovereign state
+      ?country wdt:P31 wd:Q3624078 .
+
+      # Identify neighbouring countries using the property:
+      # P47 = shares border with
+      ?country wdt:P47 ?neighbour .
+
+    }
+
+    # Group results by each country so that we can count its neighbours.
+    GROUP BY ?country
+
+    # Keep only those countries that have exactly one distinct neighbouring country.
+    HAVING (COUNT(DISTINCT ?neighbour) = 1)
+  }
+
+}

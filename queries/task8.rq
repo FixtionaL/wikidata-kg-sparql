@@ -1,0 +1,22 @@
+# Task 8: Chemical Composition
+# Objective: Count chemical compounds that contain Oxygen but do not contain Carbon.
+
+SELECT (COUNT(DISTINCT ?compound) AS ?oxygenWithoutCarbonCount)
+WHERE {
+
+  # Restrict results to chemical compounds
+  # P31 = instance of
+  # Q11173 = chemical compound
+  ?compound wdt:P31 wd:Q11173 .
+
+  # Retrieve the chemical formula
+  # P274 = chemical formula
+  ?compound wdt:P274 ?formula .
+
+  # Keep compounds whose formula contains Oxygen
+  FILTER(REGEX(?formula, "O"))
+
+  # Exclude formulas containing Carbon as an element symbol
+  FILTER(!REGEX(?formula, "C([0-9]|[A-Z]|$)"))
+
+}

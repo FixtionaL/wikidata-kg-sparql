@@ -1,0 +1,15 @@
+# Task 2: Academic Lineage
+# Objective: Count the number of doctoral students whose doctoral advisor was themselves advised by Alan Turing.
+
+# The query returns one final count of distinct students in this two-step academic lineage.
+SELECT (COUNT(DISTINCT ?student) AS ?academicLineageCount)
+WHERE {
+
+  # P184 = doctoral advisor
+  # Q7251 = Alan Turing
+  # Using the property path twice means:
+  # ?student -> doctoral advisor -> doctoral advisor -> Alan Turing
+  # In other words, the student's advisor was advised by Alan Turing.
+  ?student wdt:P184/wdt:P184 wd:Q7251 .
+
+}

@@ -1,0 +1,30 @@
+# Task 5: Polyglot Cinema
+# Objective: Count the number of films whose original audio track exists in more than three different languages.
+
+SELECT (COUNT(*) AS ?polyglotFilmCount)
+WHERE {
+
+  # Subquery identifies films that have more than three distinct original languages.
+  {
+    SELECT ?film
+    WHERE {
+
+      # Restrict entities to films
+      # P31 = instance of
+      # Q11424 = film
+      ?film wdt:P31 wd:Q11424 .
+
+      # Retrieve the original language(s) of each film
+      # P364 = original language of film or TV show
+      ?film wdt:P364 ?language .
+
+    }
+
+    # Group results by film so we can count the number of languages per film
+    GROUP BY ?film
+
+    # Keep only films that have more than three distinct languages
+    HAVING (COUNT(DISTINCT ?language) > 3)
+  }
+
+}

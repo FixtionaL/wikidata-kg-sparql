@@ -1,0 +1,30 @@
+# Task 10: The “Modern Metropolis”
+# Objective: Count the number of cities with a population greater than 1,000,000 that are located in a country founded after the year 1950.
+
+SELECT (COUNT(DISTINCT ?city) AS ?modernMetropolisCount)
+WHERE {
+
+  # Restrict results to cities
+  # P31 = instance of
+  # Q515 = city
+  ?city wdt:P31 wd:Q515 .
+
+  # Retrieve the population of the city
+  # P1082 = population
+  ?city wdt:P1082 ?population .
+
+  # Connect the city to its country
+  # P17 = country
+  ?city wdt:P17 ?country .
+
+  # Retrieve the founding / inception date of the country
+  # P571 = inception
+  ?country wdt:P571 ?founded .
+
+  # Keep only cities with population greater than 1,000,000
+  FILTER(?population > 1000000)
+
+  # Keep only countries founded after 1950
+  FILTER(YEAR(?founded) > 1950)
+
+}
